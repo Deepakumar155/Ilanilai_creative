@@ -921,21 +921,34 @@ footer {
 }
 
 @media (max-width: 768px) {
-  .mobile-menu-btn { display: block; }
+  .mobile-menu-btn { 
+    display: block; 
+    z-index: 1002; /* Ensure button stays on top of drawer */
+  }
   .nav-links {
     position: fixed;
-    top: 70px;
-    left: -100%;
-    width: 100%;
-    height: calc(100vh - 70px);
-    background-color: var(--bg-surface);
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background-color: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 30px;
-    transition: var(--transition-smooth);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-left: 1px solid var(--glass-border);
+    opacity: 1; /* Keep visible for sliding effect */
+    pointer-events: none;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    z-index: 1001;
   }
-  .nav-links.open { left: 0; }
+  .nav-links.open {
+    right: 0;
+    pointer-events: all;
+  }
   .nav-links a { font-size: 1.2rem; }
   
   .hero h1 { font-size: 2.5rem; }
