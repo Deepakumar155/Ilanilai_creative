@@ -127,7 +127,7 @@ const About = () => {
           
           <div className="about-highlights reveal" ref={highlightsRef}>
             {highlights.map((item, index) => (
-              <div className="highlight-pill" key={index}>
+              <div className="highlight-pill stagger-item" key={index} style={{ '--stagger': index }}>
                 <div className="highlight-icon">{item.icon}</div>
                 <span>{item.title}</span>
               </div>
@@ -174,7 +174,7 @@ const Services = () => {
         </div>
         <div className="grid grid-2 reveal" ref={useScrollReveal()}>
           {services.map((service, index) => (
-            <div className="service-card" key={index}>
+            <div className="service-card stagger-item" key={index} style={{ '--stagger': index }}>
               <div className="service-icon">{service.icon}</div>
               <h3>{service.title}</h3>
               <ul className="service-features">
@@ -207,8 +207,8 @@ const WhyUs = () => {
           <h2>Why <span>Choose Us</span></h2>
         </div>
         <div className="grid grid-4 reveal" ref={useScrollReveal()}>
-          {features.map((feature, idx) => (
-            <div className="feature-card" key={idx}>
+          {features.map((feature, index) => (
+            <div className="feature-card stagger-item" key={index} style={{ '--stagger': index }}>
               <div className="feature-icon">{feature.icon}</div>
               <h3>{feature.title}</h3>
               <p>{feature.desc}</p>
