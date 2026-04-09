@@ -10,25 +10,18 @@ const useScrollReveal = () => {
   const ref = useRef(null);
   
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
-    
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-    
-    return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current);
+    if (!ref.current) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
       }
-    };
+    });
+
+    observer.observe(ref.current);
+
+    return () => observer.disconnect();
   }, []);
 
   return ref;
@@ -97,6 +90,7 @@ const Hero = () => {
 const About = () => {
   const revealRef = useScrollReveal();
   const highlightsRef = useScrollReveal();
+  const textRevealRef = useScrollReveal();
 
   const highlights = [
     { title: 'Creative Designs', icon: <Palette size={20} /> },
@@ -113,7 +107,7 @@ const About = () => {
         </div>
         
         <div className="about-wrapper">
-          <div className="about-text reveal" ref={useScrollReveal()}>
+          <div className="about-text reveal" ref={textRevealRef}>
             <p>
               <span className="highlight">Ilanilai</span> is a creative freelancing team focused on delivering high-quality digital solutions for businesses and individuals. We specialize in poster creation, digital marketing, website development, and video editing.
             </p>
@@ -141,6 +135,7 @@ const About = () => {
 
 const Services = () => {
   const revealRef = useScrollReveal();
+  const gridRevealRef = useScrollReveal();
 
   const services = [
     {
@@ -172,7 +167,7 @@ const Services = () => {
           <h2>Our <span>Services</span></h2>
           <p>Comprehensive digital solutions tailored to boost your brand's presence and engagement across all platforms.</p>
         </div>
-        <div className="grid grid-2 reveal" ref={useScrollReveal()}>
+        <div className="grid grid-2 reveal" ref={gridRevealRef}>
           {services.map((service, index) => (
             <div className="service-card stagger-item" key={index} style={{ '--stagger': index }}>
               <div className="service-icon">{service.icon}</div>
@@ -192,6 +187,7 @@ const Services = () => {
 
 const WhyUs = () => {
   const revealRef = useScrollReveal();
+  const gridRevealRef = useScrollReveal();
 
   const features = [
     { title: 'Fast Delivery', desc: 'We value your time and ensure prompt delivery of all projects without compromising quality.', icon: <Clock /> },
@@ -206,7 +202,7 @@ const WhyUs = () => {
         <div className="section-head reveal" ref={revealRef}>
           <h2>Why <span>Choose Us</span></h2>
         </div>
-        <div className="grid grid-4 reveal" ref={useScrollReveal()}>
+        <div className="grid grid-4 reveal" ref={gridRevealRef}>
           {features.map((feature, index) => (
             <div className="feature-card stagger-item" key={index} style={{ '--stagger': index }}>
               <div className="feature-icon">{feature.icon}</div>
@@ -222,6 +218,7 @@ const WhyUs = () => {
 
 const Contact = () => {
   const revealRef = useScrollReveal();
+  const wrapRevealRef = useScrollReveal();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
@@ -266,7 +263,7 @@ const Contact = () => {
           <p>Ready to start your next project? Contact us today for a free consultation.</p>
         </div>
         
-        <div className="contact-wrap reveal" ref={useScrollReveal()}>
+        <div className="contact-wrap reveal" ref={wrapRevealRef}>
           <div className="contact-info">
             <div className="info-item">
               <div className="info-icon"><Phone /></div>
@@ -376,13 +373,13 @@ const FloatingWhatsApp = () => (
 
 const IntroScreen = ({ onComplete }) => {
   const [isVisible, setIsVisible] = useState(true);
+  const contentRef = useRef(null);
 
   useEffect(() => {
     // Fade out text early
     const contentTimer = setTimeout(() => {
-      const content = document.querySelector('.intro-content');
-      if (content) {
-        content.classList.add('exit');
+      if (contentRef.current) {
+        contentRef.current.classList.add('exit');
       }
     }, 1800);
 
@@ -408,7 +405,7 @@ const IntroScreen = ({ onComplete }) => {
 
   return (
     <div className={`intro-screen ${!isVisible ? 'hidden' : ''}`}>
-      <div className="intro-content">
+      <div className="intro-content" ref={contentRef}>
         <div className="intro-logo">
           <span className="word word-1">Ila</span>
           <span className="word word-2">nilai</span>
